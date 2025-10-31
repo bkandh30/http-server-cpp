@@ -10,7 +10,19 @@
 #include "request.hpp"
 #include "response.hpp"
 
-Server::Server(int port) : port_(port), server_fd_(-1) {}
+Server::Server(int port) : port_(port), server_fd_(-1) {
+    register_routes();
+}
+
+void Server::register_routes() {
+    router_.get("/health", []() {
+        return Response::build(200, "OK");
+    });
+
+    router_.get("/api/hello", []() {
+        return Response::build(200, "{\"message\": \"Hello from API!\"}", "application/json");
+    });
+}
 
 void Server::start() {
     server_fd_ = socket(AF_INET, SOCK_STREAM, 0);
@@ -78,9 +90,15 @@ void Server::handle_client(int client_fd) {
     if (request.method.empty() || request.path.empty()) {
         response = Response::build(400, "Bad Request");
     } else if (request.method == "GET") {
-        response = serve_static_file(request.path);
-        if (response.empty()) {
-            response = Response::build(404, "Not Found");
+        // Check if there's a registered route first
+        if (router_.has_route(request.path)) {
+            response = router_.execute(request.path);
+        } else {
+            // If no route, try to serve static file
+            response = serve_static_file(request.path);
+            if (response.empty()) {
+                response = Response::build(404, "Not Found");
+            }
         }
     } else {
         response = Response::build(405, "Method Not Allowed");

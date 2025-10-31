@@ -1,0 +1,25 @@
+# Build directory
+build/
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Compiled Object files
+*.o
+*.obj
+
+# Executables
+*.exe
+*.out
+server
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# System files
+.DS_Store
+
