@@ -5,4 +5,4 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(include)
-add_executable(server src/main.cpp src/server.cpp src/request.cpp src/response.cpp)
+add_executable(server src/main.cpp src/server.cpp src/request.cpp src/response.cpp src/router.cpp)

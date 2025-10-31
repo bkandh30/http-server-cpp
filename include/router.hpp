@@ -13,4 +13,4 @@ class Router {
 
     private:
         std::unordered_map<std::string, Handler> routes_;
-}
+};
