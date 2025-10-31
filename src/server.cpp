@@ -62,9 +62,12 @@ void Server::start() {
             continue;
         }
 
-        std::cout << "New connection accepted." << std::endl;
-        handle_client(client_fd);
-        close(client_fd);
+        std::thread([this, client_fd]() {
+            std::cout << "[Thread " << std::this_thread::get_id() << "] Handling client..." << std::endl;
+            handle_client(client_fd);
+            close(client_fd);
+            std::cout << "[Thread " << std::this_thread::get_id() << "] Done." << std::endl;
+        }).detach();
     }
 
     close(server_fd_);
