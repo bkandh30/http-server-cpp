@@ -1,5 +1,6 @@
 #include <arpa/inet.h>
 #include <cstring>
+#include <fstream>
 #include <iostream>
 #include <netinet/in.h>
 #include <sys/socket.h>
@@ -73,17 +74,20 @@ void Server::handle_client(int client_fd) {
 
     if (request.method.empty() || request.path.empty()) {
         response = Response::build(400, "Bad Request");
-    } else if (request.path == "/" || request.path == "/index.html") {
-        response = Response::build(200, "Hello from C++ HTTP Server!");
+    } else if (request.method == "GET") {
+        response = serve_static_file(request.path);
+        if (response.empty()) {
+            response = Response::build(404, "Not Found");
+        }
     } else {
-        response = Response::build(404, "Not Found");
+        response = Response::build(405, "Method Not Allowed");
     }
 
     send(client_fd, response.c_str(), response.size(), 0);
 }
 
 std::string Server::serve_static_file(const std::string& path) {
-    std::string file_path = "public" + (path == "/" ? "/index.html" : path);
+    std::string file_path = "../public" + (path == "/" ? "/index.html" : path);
     std::ifstream file(file_path, std::ios::binary);
 
     if (!file.is_open()) return "";
@@ -91,10 +95,10 @@ std::string Server::serve_static_file(const std::string& path) {
     std::string body((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 
     std::string mime = "text/plain";
-    if (file_path.ends_with(".html")) mime = "text/html";
-    else if (file_path.ends_with(".css")) mime = "text/css";
-    else if (file_path.ends_with(".js")) mime = "application/javascript";
-    else if (file_path.ends_with(".json")) mime = "application/json";
+    if (file_path.size() >= 5 && file_path.substr(file_path.size() - 5) == ".html") mime = "text/html";
+    else if (file_path.size() >= 4 && file_path.substr(file_path.size() - 4) == ".css") mime = "text/css";
+    else if (file_path.size() >= 3 && file_path.substr(file_path.size() - 3) == ".js") mime = "application/javascript";
+    else if (file_path.size() >= 5 && file_path.substr(file_path.size() - 5) == ".json") mime = "application/json";
 
     return Response::build(200, body, mime);
 }
