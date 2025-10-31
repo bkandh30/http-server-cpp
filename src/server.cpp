@@ -67,13 +67,13 @@ void Server::handle_client(int client_fd) {
     std::string raw_request(buffer);
     Request request = Request::parse(raw_request);
 
-    std::cout << req.method << " " << req.path << " " << req.version << std::endl;
+    std::cout << request.method << " " << request.path << " " << request.version << std::endl;
 
     std::string response;
 
-    if (req.method.empty() || req.path.empty()) {
+    if (request.method.empty() || request.path.empty()) {
         response = Response::build(400, "Bad Request");
-    } else if (req.path == "/" || req.path == "/index.html") {
+    } else if (request.path == "/" || request.path == "/index.html") {
         response = Response::build(200, "Hello from C++ HTTP Server!");
     } else {
         response = Response::build(404, "Not Found");

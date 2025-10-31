@@ -8,7 +8,7 @@ Request Request::parse(const std::string& raw) {
     std::string line;
 
     if (std::getline(stream, line)) {
-        std::isstringstream line_stream(line);
+        std::istringstream line_stream(line);
         line_stream >> req.method >> req.path >> req.version;
     }
 
