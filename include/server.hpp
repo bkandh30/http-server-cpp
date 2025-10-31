@@ -3,6 +3,7 @@
 #include <thread>
 
 #include "router.hpp"
+#include "logger.hpp"
 
 class Server {
     public:
