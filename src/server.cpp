@@ -6,6 +6,8 @@
 #include <unistd.h>
 
 #include "server.hpp"
+#include "request.hpp"
+#include "response.hpp"
 
 Server::Server(int port) : port_(port), server_fd_(-1) {}
 
@@ -59,9 +61,23 @@ void Server::start() {
 void Server::handle_client(int client_fd) {
     char buffer[4096] = {0};
     ssize_t bytes_read = read(client_fd, buffer, sizeof(buffer));
-    if (bytes_read > 0) {
-        std::cout << "Received request: " << buffer << std::endl;
-        std::string response = "HTTP/1.1 200 OK\r\nContent-Length: 12\r\n\r\nHello, World!";
-        send(client_fd, response.c_str(), response.size(), 0);
+
+    if (bytes_read <= 0) return;
+
+    std::string raw_request(buffer);
+    Request request = Request::parse(raw_request);
+
+    std::cout << req.method << " " << req.path << " " << req.version << std::endl;
+
+    std::string response;
+
+    if (req.method.empty() || req.path.empty()) {
+        response = Response::build(400, "Bad Request");
+    } else if (req.path == "/" || req.path == "/index.html") {
+        response = Response::build(200, "Hello from C++ HTTP Server!");
+    } else {
+        response = Response::build(404, "Not Found");
     }
+
+    send(client_fd, response.c_str(), response.size(), 0);
 }
