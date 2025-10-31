@@ -12,4 +12,4 @@ void Logger::log(LogLevel level, const std::string& msg) {
     }
 
     std::cout << levelStr << std::ctime(&time) << " - " << msg << std::endl;
-}
+};

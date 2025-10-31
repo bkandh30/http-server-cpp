@@ -76,6 +76,8 @@ void Server::start() {
 }
 
 void Server::handle_client(int client_fd) {
+    auto start_time = std::chrono::steady_clock::now();
+    
     char buffer[4096] = {0};
     ssize_t bytes_read = read(client_fd, buffer, sizeof(buffer));
 
@@ -108,7 +110,7 @@ void Server::handle_client(int client_fd) {
     auto end_time = std::chrono::steady_clock::now();
     double duration = std::chrono::duration<double, std::milli>(end_time - start_time).count();
 
-    Logger::info(req.method + " " + req.path + " -> " +
+    Logger::info(request.method + " " + request.path + " -> " +
                  std::to_string(response.size()) + "B in " +
                  std::to_string(duration) + "ms");
 }

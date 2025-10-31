@@ -12,4 +12,4 @@ class Logger {
         static void info(const std::string& msg) { log(LogLevel::INFO, msg); }
         static void warn(const std::string& msg) { log(LogLevel::WARN, msg); }
         static void error(const std::string& msg) { log(LogLevel::ERROR, msg); }
-}
+};
