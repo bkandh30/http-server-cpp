@@ -81,3 +81,20 @@ void Server::handle_client(int client_fd) {
 
     send(client_fd, response.c_str(), response.size(), 0);
 }
+
+std::string Server::serve_static_file(const std::string& path) {
+    std::string file_path = "public" + (path == "/" ? "/index.html" : path);
+    std::ifstream file(file_path, std::ios::binary);
+
+    if (!file.is_open()) return "";
+
+    std::string body((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+
+    std::string mime = "text/plain";
+    if (file_path.ends_with(".html")) mime = "text/html";
+    else if (file_path.ends_with(".css")) mime = "text/css";
+    else if (file_path.ends_with(".js")) mime = "application/javascript";
+    else if (file_path.ends_with(".json")) mime = "application/json";
+
+    return Response::build(200, body, mime);
+}
