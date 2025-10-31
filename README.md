@@ -46,16 +46,16 @@ The server will start listening on `http://localhost:8080`.
 
 ## Roadmap
 
-| Phase | Description                           | Progress |
-| ----- | ------------------------------------- | -------- |
-| 0     | Setup and documentation               | [ X ]    |
-| 1     | Basic TCP socket server               | [ X ]    |
-| 2     | HTTP request parsing and response     | [ X ]    |
-| 3     | Static file serving                   | [ X ]    |
-| 4     | Multithreaded connection handling     | [ X ]    |
-| 5     | Routing system                        | [ X ]    |
-| 6     | Configuration and logging             | [ ]      |
-| 7     | Benchmarking and optimization         | [ ]      |
-| 8     | Final polish (Docker, README visuals) | [ ]      |
+| Phase | Description                       | Progress |
+| ----- | --------------------------------- | -------- |
+| 0     | Setup and documentation           | [ X ]    |
+| 1     | Basic TCP socket server           | [ X ]    |
+| 2     | HTTP request parsing and response | [ X ]    |
+| 3     | Static file serving               | [ X ]    |
+| 4     | Multithreaded connection handling | [ X ]    |
+| 5     | Routing system                    | [ X ]    |
+| 6     | Configuration and logging         | [ X ]    |
+| 7     | Benchmarking and optimization     | [ ]      |
+| 9     | Final polish                      | [ ]      |
 
 ---
