@@ -12,6 +12,16 @@
 
 Server::Server(int port) : port_(port), server_fd_(-1) {}
 
+void Server::register_routes() {
+    router_.get("/health", []() {
+        return Response::build(200, "OK");
+    });
+
+    router_.get("/api/hello", []() {
+        return Response::build(200, "{\"message\": \"Hello from API!\"}", "application/json");
+    });
+}
+
 void Server::start() {
     server_fd_ = socket(AF_INET, SOCK_STREAM, 0);
     if (server_fd_ == -1) {
