@@ -50,7 +50,7 @@ The server will start listening on `http://localhost:8080`.
 | ----- | ------------------------------------- | -------- |
 | 0     | Setup and documentation               | [ X ]    |
 | 1     | Basic TCP socket server               | [ X ]    |
-| 2     | HTTP request parsing and response     | [ ]      |
+| 2     | HTTP request parsing and response     | [ X ]    |
 | 3     | Static file serving                   | [ ]      |
 | 4     | Multithreaded connection handling     | [ ]      |
 | 5     | Routing system                        | [ ]      |
