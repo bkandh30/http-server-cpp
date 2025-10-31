@@ -153,6 +153,54 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/request.o: src/request.cpp.o
+.PHONY : src/request.o
+
+# target to build an object file
+src/request.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/request.cpp.o
+.PHONY : src/request.cpp.o
+
+src/request.i: src/request.cpp.i
+.PHONY : src/request.i
+
+# target to preprocess a source file
+src/request.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/request.cpp.i
+.PHONY : src/request.cpp.i
+
+src/request.s: src/request.cpp.s
+.PHONY : src/request.s
+
+# target to generate assembly for a file
+src/request.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/request.cpp.s
+.PHONY : src/request.cpp.s
+
+src/response.o: src/response.cpp.o
+.PHONY : src/response.o
+
+# target to build an object file
+src/response.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/response.cpp.o
+.PHONY : src/response.cpp.o
+
+src/response.i: src/response.cpp.i
+.PHONY : src/response.i
+
+# target to preprocess a source file
+src/response.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/response.cpp.i
+.PHONY : src/response.cpp.i
+
+src/response.s: src/response.cpp.s
+.PHONY : src/response.s
+
+# target to generate assembly for a file
+src/response.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/response.cpp.s
+.PHONY : src/response.cpp.s
+
 src/server.o: src/server.cpp.o
 .PHONY : src/server.o
 
@@ -189,6 +237,12 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/request.o"
+	@echo "... src/request.i"
+	@echo "... src/request.s"
+	@echo "... src/response.o"
+	@echo "... src/response.i"
+	@echo "... src/response.s"
 	@echo "... src/server.o"
 	@echo "... src/server.i"
 	@echo "... src/server.s"
