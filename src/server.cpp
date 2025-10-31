@@ -9,6 +9,7 @@
 #include "server.hpp"
 #include "request.hpp"
 #include "response.hpp"
+#include "logger.hpp"
 
 Server::Server(int port) : port_(port), server_fd_(-1) {
     register_routes();
@@ -27,7 +28,7 @@ void Server::register_routes() {
 void Server::start() {
     server_fd_ = socket(AF_INET, SOCK_STREAM, 0);
     if (server_fd_ == -1) {
-        std::cerr << "Error creating socket" << std::endl;
+        Logger::error("Error creating socket");
         return;
     }
 
@@ -40,33 +41,33 @@ void Server::start() {
     setsockopt(server_fd_, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt));
 
     if (bind(server_fd_, (struct sockaddr*)&address, sizeof(address)) < 0) {
-        perror("bind failed");
+        Logger::error("bind failed");
         close(server_fd_);
         exit(EXIT_FAILURE);
     }
 
     if (listen(server_fd_, 10) < 0) {
-        perror("listen failed");
+        Logger::error("listen failed");
         close(server_fd_);
         exit(EXIT_FAILURE);
     }
 
-    std::cout << "Server listening on port " << port_ << "..." << std::endl;
+    Logger::info("Server listening on port " + std::to_string(port_) + "...");
 
     while (true) {
         sockaddr_in client_addr{};
         socklen_t client_len = sizeof(client_addr);
         int client_fd = accept(server_fd_, (struct sockaddr*)&client_addr, &client_len);
         if (client_fd < 0) {
-            perror("accept failed");
+            Logger::warn("accept failed");
             continue;
         }
 
         std::thread([this, client_fd]() {
-            std::cout << "[Thread " << std::this_thread::get_id() << "] Handling client..." << std::endl;
+            Logger::info("Handling client...");
             handle_client(client_fd);
             close(client_fd);
-            std::cout << "[Thread " << std::this_thread::get_id() << "] Done." << std::endl;
+            Logger::info("Done.");
         }).detach();
     }
 
@@ -83,18 +84,16 @@ void Server::handle_client(int client_fd) {
     std::string raw_request(buffer);
     Request request = Request::parse(raw_request);
 
-    std::cout << request.method << " " << request.path << " " << request.version << std::endl;
+    Logger::info(request.method + " " + request.path + " " + request.version);
 
     std::string response;
 
     if (request.method.empty() || request.path.empty()) {
         response = Response::build(400, "Bad Request");
     } else if (request.method == "GET") {
-        // Check if there's a registered route first
         if (router_.has_route(request.path)) {
             response = router_.execute(request.path);
         } else {
-            // If no route, try to serve static file
             response = serve_static_file(request.path);
             if (response.empty()) {
                 response = Response::build(404, "Not Found");
@@ -105,6 +104,13 @@ void Server::handle_client(int client_fd) {
     }
 
     send(client_fd, response.c_str(), response.size(), 0);
+
+    auto end_time = std::chrono::steady_clock::now();
+    double duration = std::chrono::duration<double, std::milli>(end_time - start_time).count();
+
+    Logger::info(req.method + " " + req.path + " -> " +
+                 std::to_string(response.size()) + "B in " +
+                 std::to_string(duration) + "ms");
 }
 
 std::string Server::serve_static_file(const std::string& path) {
