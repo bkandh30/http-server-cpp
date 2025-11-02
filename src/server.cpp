@@ -20,8 +20,8 @@ void Server::register_routes() {
         return Response::build(200, "OK");
     });
 
-    router_.get("/api/hello", []() {
-        return Response::build(200, "{\"message\": \"Hello from API!\"}", "application/json");
+    router_.get("/metrics", [this]() {
+        return Response::build(200, metrics_.json(), "application/json");
     });
 }
 
@@ -110,6 +110,8 @@ void Server::handle_client(int client_fd) {
     auto end_time = std::chrono::steady_clock::now();
     double duration = std::chrono::duration<double, std::milli>(end_time - start_time).count();
 
+    metrics_.record_request(duration, !response.empty());
+    
     Logger::info(request.method + " " + request.path + " -> " +
                  std::to_string(response.size()) + "B in " +
                  std::to_string(duration) + "ms");
