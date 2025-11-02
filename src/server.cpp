@@ -119,11 +119,20 @@ void Server::handle_client(int client_fd) {
 
 std::string Server::serve_static_file(const std::string& path) {
     std::string file_path = "../public" + (path == "/" ? "/index.html" : path);
+
+    std::string cached;
+    if (cache_.get(file_path, cached)) {
+        Logger::info("Cache hit for " + file_path);
+        return cached;
+    }
+
     std::ifstream file(file_path, std::ios::binary);
 
     if (!file.is_open()) return "";
 
-    std::string body((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+    std::ostringstream buffer;
+    buffer << file.rdbuf();
+    std::string body = buffer.str();
 
     std::string mime = "text/plain";
     if (file_path.size() >= 5 && file_path.substr(file_path.size() - 5) == ".html") mime = "text/html";
@@ -131,5 +140,9 @@ std::string Server::serve_static_file(const std::string& path) {
     else if (file_path.size() >= 3 && file_path.substr(file_path.size() - 3) == ".js") mime = "application/javascript";
     else if (file_path.size() >= 5 && file_path.substr(file_path.size() - 5) == ".json") mime = "application/json";
 
-    return Response::build(200, body, mime);
+    std::string response = Response::build(200, body, mime);
+
+    cache_.put(file_path, response);
+    Logger::info("Cache miss for " + file_path);
+    return response;
 }
