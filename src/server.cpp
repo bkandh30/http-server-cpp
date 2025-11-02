@@ -20,8 +20,8 @@ void Server::register_routes() {
         return Response::build(200, "OK");
     });
 
-    router_.get("/api/hello", []() {
-        return Response::build(200, "{\"message\": \"Hello from API!\"}", "application/json");
+    router_.get("/metrics", [this]() {
+        return Response::build(200, metrics_.json(), "application/json");
     });
 }
 
