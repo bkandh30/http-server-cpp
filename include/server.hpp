@@ -5,6 +5,7 @@
 #include "router.hpp"
 #include "logger.hpp"
 #include "metrics.hpp"
+#include "cache.hpp"
 
 class Server {
     public:
@@ -15,7 +16,8 @@ class Server {
         int port_;
         int server_fd_;
         Router router_;
-
+        FileCache cache_{20};
+        std::atomic<bool> running_{true};
         Metrics& metrics_ = Metrics::Instance();
         
         void handle_client(int client_fd);
