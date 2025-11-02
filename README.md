@@ -55,7 +55,7 @@ The server will start listening on `http://localhost:8080`.
 | 4     | Multithreaded connection handling | [ X ]    |
 | 5     | Routing system                    | [ X ]    |
 | 6     | Configuration and logging         | [ X ]    |
-| 7     | Benchmarking and optimization     | [ ]      |
-| 9     | Final polish                      | [ ]      |
+| 7     | Benchmarking and optimization     | [ X ]    |
+| 9     | Final polish                      | [ X ]    |
 
 ---
