@@ -1,11 +1,11 @@
 # HTTP Server Testing Guide
 
-This guide helps you verify **all integrated features** of your HTTP server on the `main` branch.  
-It tests correctness, performance, concurrency, caching, and metrics — without referencing individual development phases.
+This guide tests all the features of HTTP server on the `main` branch.  
+It tests correctness, performance, concurrency, caching, and metrics.
 
 ---
 
-## ⚙️ Setup
+## Setup
 
 ### Build
 
