@@ -14,7 +14,7 @@ void Metrics::record_request(double latency_ms, bool cache_hit) {
         cache_hits_++;
     }
 
-    avg_latency_ += (latency_ms - avg_latency_) / total_requests_.load();
+    avg_latency_ms_ += (latency_ms - avg_latency_ms_) / total_requests_.load();
 }
 
 std::string Metrics::json() const {
@@ -23,6 +23,6 @@ std::string Metrics::json() const {
     ss << "{"
         << "\"total_requests\": " << total_requests_.load() << ","
         << "\"cache_hits\": " << cache_hits_.load() << ","
-        << "\"avg_latency_ms\": " << avg_latency_ms_.load() << "}";
+        << "\"avg_latency_ms\": " << avg_latency_ms_ << "}";
     return ss.str();
 }
